@@ -9,7 +9,7 @@ module TSValidate.Validators {
     /**
      * TSValidate.Validators.PresenceOf
      *
-     * Checks if a value has a correct e-mail format
+     * Validates that a value is not null or empty string
      *
      *<code>
      *import Email = TSValidate.Validators.PresenceOf;
