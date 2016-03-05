@@ -6,6 +6,20 @@ module TSValidate.Validators {
     import Validator = TSValidate.Validator;
     import Message = TSValidate.Message;
 
+    /**
+     * TSValidate.Validators.Identical
+     *
+     * Checks if a value is identical to other
+     *
+     *<code>
+     *import Identical = TSValidate.Validators.Identical;
+     *
+     *validate.add('terms', new Identical()
+     *  .accepted('yes')
+     *  .message('Terms and conditions must be accepted')
+     *);
+     *</code>
+     */
     export class Identical extends Validator {
 
         protected _accepted: any;
