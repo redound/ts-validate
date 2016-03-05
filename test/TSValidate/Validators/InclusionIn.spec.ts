@@ -4,15 +4,57 @@ declare var describe, it, expect, jasmine, beforeEach;
 
 describe("TSValidate.Validators.InclusionIn", () => {
 
+    var validation;
+
     beforeEach(() => {
 
+        validation = new TSValidate.Validation;
     });
 
-    describe("constructor()", () => {
+    it("should fail if the value isn't in the domain", () => {
 
-        it("true be true", () => {
+        validation.add(
+            'status',
+            new TSValidate.Validators.InclusionIn()
+                .message('The status must not be A or B')
+                .domain(['A', 'B'])
+        );
 
-            expect(true).toBe(true);
+        var messages = validation.validate({
+            status: "C"
         });
+
+        expect(messages.count()).toBe(1);
+    });
+
+    it("should pass if the value is in the domain", () => {
+
+        validation.add(
+            'status',
+            new TSValidate.Validators.InclusionIn()
+                .message('The status must not be A or B')
+                .domain(['A', 'B'])
+        );
+
+        var messages = validation.validate({
+            status: "A"
+        });
+
+        expect(messages.count()).toBe(0);
+    });
+
+    it("should fail if the value isn't in data", () => {
+
+        validation.add(
+            'status',
+            new TSValidate.Validators.InclusionIn()
+                .message('The status must not be A or B')
+                .domain(['A', 'B'])
+        );
+
+        var messages = validation.validate({
+        });
+
+        expect(messages.count()).toBe(1);
     });
 });
