@@ -15,6 +15,10 @@ module TSValidate {
             this._options = options;
         }
 
+        protected isEmpty(value) {
+            return value === "" || _.isNull(value);
+        }
+
         /**
          * Cehck if an option is defined
          * @param key

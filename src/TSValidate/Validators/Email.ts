@@ -31,7 +31,7 @@ module TSValidate.Validators {
 
             value = validation.getValue(field);
 
-            if (this.getAllowEmpty() && value === "") {
+            if (this.getAllowEmpty() && this.isEmpty(value)) {
                 return true;
             }
 

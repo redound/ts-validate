@@ -27,7 +27,7 @@ module TSValidate.Validators {
 
             value = validation.getValue(field);
 
-            if (_.isNull(value) || value === "") {
+            if (_.isNull(value) || this.isEmpty(value)) {
 
                 var label = this.getLabel();
                 if (!label) {
