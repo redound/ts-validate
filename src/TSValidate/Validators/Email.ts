@@ -6,6 +6,19 @@ module TSValidate.Validators {
     import Validator = TSValidate.Validator;
     import Message = TSValidate.Message;
 
+    /**
+     * TSValidate.Validators.Email
+     *
+     * Checks if a value has a correct e-mail format
+     *
+     *<code>
+     *import Email = TSValidate.Validators.Email;
+     *
+     *validate.add('email', new Email()
+     *   .message('The e-mail is not valid')
+     *);
+     *</code>
+     */
     export class Email extends Validator {
 
         public static EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
