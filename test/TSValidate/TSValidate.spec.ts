@@ -1,1 +1,1 @@
-/// <reference path="../../build/ts-core.d.ts" />
+/// <reference path="../../build/ts-validate.d.ts" />

@@ -5,7 +5,7 @@ module.exports = function(grunt) {
         // For compiling our TypeScript/JavaScript
         ts: {
             build: {
-                src: ['src/TSCore/**/*.ts', '!node_modules/**/*.ts'],
+                src: ['src/TSValidate/**/*.ts', '!node_modules/**/*.ts'],
                 out: 'build/ts-validate.js',
                 reference: 'src/ts-validate.r.ts',
                 options: {
