@@ -4,15 +4,69 @@ declare var describe, it, expect, jasmine, beforeEach;
 
 describe("TSValidate.Validators.PresenceOf", () => {
 
+    var validation;
+
     beforeEach(() => {
 
+        validation = new TSValidate.Validation;
     });
 
-    describe("constructor()", () => {
+    it("should fail on null value", () => {
 
-        it("true be true", () => {
+        validation.add(
+            'name',
+            new TSValidate.Validators.PresenceOf()
+                .message('The name is required')
+        );
 
-            expect(true).toBe(true);
+        var messages = validation.validate({
+            name: null
         });
+
+        expect(messages.count()).toBe(1);
+    });
+
+    it("should fail on empty string value", () => {
+
+        validation.add(
+            'name',
+            new TSValidate.Validators.PresenceOf()
+                .message('The name is required')
+        );
+
+        var messages = validation.validate({
+            name: ""
+        });
+
+        expect(messages.count()).toBe(1);
+    });
+
+    it("should fail when property isn't part of data", () => {
+
+        validation.add(
+            'name',
+            new TSValidate.Validators.PresenceOf()
+                .message('The name is required')
+        );
+
+        var messages = validation.validate({});
+
+        expect(messages.count()).toBe(1);
+    });
+
+
+    it("should pass when valid value is given", () => {
+
+        validation.add(
+            'name',
+            new TSValidate.Validators.PresenceOf()
+                .message('The name is required')
+        );
+
+        var messages = validation.validate({
+            name: "Olivier"
+        });
+
+        expect(messages.count()).toBe(0);
     });
 });

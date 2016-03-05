@@ -6,6 +6,19 @@ module TSValidate.Validators {
     import Validator = TSValidate.Validator;
     import Message = TSValidate.Message;
 
+    /**
+     * TSValidate.Validators.PresenceOf
+     *
+     * Checks if a value has a correct e-mail format
+     *
+     *<code>
+     *import Email = TSValidate.Validators.PresenceOf;
+     *
+     *validate.add('name', new PresenceOf()
+     *   .message('The name is required')
+     *);
+     *</code>
+     */
     export class PresenceOf extends Validator {
 
         public validate(validation: TSValidate.Validation, field: string): boolean {
