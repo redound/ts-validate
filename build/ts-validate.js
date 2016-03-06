@@ -131,7 +131,7 @@ var TSValidate;
                 Alnum: "Field :field must contain only letters and numbers",
                 Alpha: "Field :field must contain only letters",
                 Between: "Field :field must be within the range of :min to :max",
-                Confirmation: "Field :field must be the same as :with",
+                Confirmation: "Field :field must be the same as :against",
                 Digit: "Field :field must be numeric",
                 Email: "Field :field must be an email address",
                 ExclusionIn: "Field :field must not be a part of list: :domain",
@@ -233,6 +233,9 @@ var TSValidate;
             if (options === void 0) { options = {}; }
             this._options = options;
         }
+        Validator.prototype.isEmpty = function (value) {
+            return value === "" || _.isNull(value);
+        };
         Validator.prototype.hasOption = function (key) {
             return !_.isUndefined(this._options[key]);
         };
@@ -271,11 +274,60 @@ var TSValidate;
 (function (TSValidate) {
     var Validators;
     (function (Validators) {
-        var Between = (function () {
+        var Validator = TSValidate.Validator;
+        var Message = TSValidate.Message;
+        var Between = (function (_super) {
+            __extends(Between, _super);
             function Between() {
+                _super.apply(this, arguments);
             }
+            Between.prototype.validate = function (validation, field) {
+                var value, minimum, maximum, message, label, replacePairs;
+                value = validation.getValue(field);
+                minimum = this.getMinimum();
+                maximum = this.getMaximum();
+                if (this.allowEmpty() && this.isEmpty(value)) {
+                    return true;
+                }
+                if (value < minimum || value > maximum) {
+                    label = this.getLabel();
+                    if (!label) {
+                        validation.getLabel(field);
+                    }
+                    message = this.getMessage();
+                    replacePairs = [':field', label, ':min', minimum, ':max', maximum];
+                    if (!message) {
+                        message = validation.getDefaultMessage('Between');
+                    }
+                    message.replace(replacePairs[0], replacePairs[1]);
+                    message.replace(replacePairs[1], replacePairs[2]);
+                    message.replace(replacePairs[3], replacePairs[4]);
+                    validation.appendMessage(new Message(message, field, 'Between'));
+                    return false;
+                }
+                return true;
+            };
+            Between.prototype.allowEmpty = function (allowEmpty) {
+                if (allowEmpty === void 0) { allowEmpty = true; }
+                this._allowEmpty = allowEmpty;
+                return this;
+            };
+            Between.prototype.minimum = function (minimum) {
+                this._minimum = minimum;
+                return this;
+            };
+            Between.prototype.getMinimum = function () {
+                return this._minimum;
+            };
+            Between.prototype.maximum = function (maximum) {
+                this._maximum = maximum;
+                return this;
+            };
+            Between.prototype.getMaximum = function () {
+                return this._maximum;
+            };
             return Between;
-        })();
+        })(Validator);
         Validators.Between = Between;
     })(Validators = TSValidate.Validators || (TSValidate.Validators = {}));
 })(TSValidate || (TSValidate = {}));
@@ -283,11 +335,72 @@ var TSValidate;
 (function (TSValidate) {
     var Validators;
     (function (Validators) {
-        var Confirmation = (function () {
+        var Validator = TSValidate.Validator;
+        var Message = TSValidate.Message;
+        var Confirmation = (function (_super) {
+            __extends(Confirmation, _super);
             function Confirmation() {
+                _super.apply(this, arguments);
+                this._ignoreCase = false;
             }
+            Confirmation.prototype.validate = function (validation, field) {
+                var fieldAgainst, value, valueAgainst, message, label, labelAgainst, replacePairs;
+                fieldAgainst = this.getAgainst();
+                value = validation.getValue(field);
+                valueAgainst = validation.getValue(fieldAgainst);
+                if (!this.compare(value, valueAgainst)) {
+                    label = this.getLabel();
+                    if (!label) {
+                        label = validation.getLabel(field);
+                    }
+                    labelAgainst = this.getLabelAgainst();
+                    if (!labelAgainst) {
+                        labelAgainst = validation.getLabel(fieldAgainst);
+                    }
+                    message = this.getMessage();
+                    replacePairs = [':field', label, ':against', labelAgainst];
+                    if (!message) {
+                        message = validation.getDefaultMessage('Confirmation');
+                    }
+                    message.replace(replacePairs[0], replacePairs[1]);
+                    message.replace(replacePairs[2], replacePairs[3]);
+                    validation.appendMessage(new Message(message, field, 'Confirmation'));
+                    return false;
+                }
+                return true;
+            };
+            Confirmation.prototype.compare = function (a, b) {
+                if (a === void 0) { a = ''; }
+                if (b === void 0) { b = ''; }
+                if (this.getIgnoreCase()) {
+                    return a.toLowerCase() === b.toLowerCase();
+                }
+                return a === b;
+            };
+            Confirmation.prototype.ignoreCase = function (ignoreCase) {
+                if (ignoreCase === void 0) { ignoreCase = true; }
+                this._ignoreCase = ignoreCase;
+                return this;
+            };
+            Confirmation.prototype.getIgnoreCase = function () {
+                return this._ignoreCase;
+            };
+            Confirmation.prototype.against = function (against) {
+                this._against = against;
+                return this;
+            };
+            Confirmation.prototype.getAgainst = function () {
+                return this._against;
+            };
+            Confirmation.prototype.labelAgainst = function (labelAgainst) {
+                this._labelAgainst = labelAgainst;
+                return this;
+            };
+            Confirmation.prototype.getLabelAgainst = function () {
+                return this._labelAgainst;
+            };
             return Confirmation;
-        })();
+        })(Validator);
         Validators.Confirmation = Confirmation;
     })(Validators = TSValidate.Validators || (TSValidate.Validators = {}));
 })(TSValidate || (TSValidate = {}));
@@ -306,7 +419,7 @@ var TSValidate;
             Email.prototype.validate = function (validation, field) {
                 var value, message, label, replacePairs;
                 value = validation.getValue(field);
-                if (this.getAllowEmpty() && value === "") {
+                if (this.getAllowEmpty() && this.isEmpty(value)) {
                     return true;
                 }
                 if (!Email.EMAIL_REGEX.test(value)) {
@@ -342,11 +455,91 @@ var TSValidate;
 (function (TSValidate) {
     var Validators;
     (function (Validators) {
-        var ExclusionIn = (function () {
+        var Validator = TSValidate.Validator;
+        var Message = TSValidate.Message;
+        var ExclusionIn = (function (_super) {
+            __extends(ExclusionIn, _super);
             function ExclusionIn() {
+                _super.apply(this, arguments);
+                this._strict = false;
+                this._allowEmpty = false;
             }
+            ExclusionIn.prototype.validate = function (validation, field) {
+                var value, domain, message, label, replacePairs, strict;
+                value = validation.getValue(field);
+                if (this.getAllowEmpty() && this.isEmpty(value)) {
+                    return true;
+                }
+                domain = this.getDomain();
+                if (!_.isArray(domain)) {
+                    throw new TSValidate.Exception('Option `domain` must be an array');
+                }
+                strict = this.getStrict();
+                if (this.inArray(value, domain, strict)) {
+                    label = this.getLabel();
+                    if (!label) {
+                        label = validation.getLabel(field);
+                    }
+                    message = this.getMessage();
+                    replacePairs = [":field", label, ":domain", domain.join(', ')];
+                    if (!message) {
+                        message = validation.getDefaultMessage('ExclusionIn');
+                    }
+                    message = message.replace(replacePairs[0], replacePairs[1]);
+                    message = message.replace(replacePairs[2], replacePairs[3]);
+                    validation.appendMessage(new Message(message, field, "ExclusionIn"));
+                    return false;
+                }
+                return true;
+            };
+            ExclusionIn.prototype.inArray = function (needle, haystack, strict) {
+                var _this = this;
+                if (strict === void 0) { strict = false; }
+                var inArray = false;
+                _.each(haystack, function (part) {
+                    if (_this.compare(part, needle, strict)) {
+                        inArray = true;
+                    }
+                });
+                return inArray;
+            };
+            ExclusionIn.prototype.compare = function (a, b, strict) {
+                if (_.isObject(a) && _.isObject(b)) {
+                    if (strict) {
+                        return JSON.stringify(a) === JSON.stringify(b);
+                    }
+                    return JSON.stringify(a) == JSON.stringify(b);
+                }
+                if (strict) {
+                    return a === b;
+                }
+                return a == b;
+            };
+            ExclusionIn.prototype.strict = function (strict) {
+                if (strict === void 0) { strict = true; }
+                this._strict = strict;
+                return this;
+            };
+            ExclusionIn.prototype.getStrict = function () {
+                return this._strict;
+            };
+            ExclusionIn.prototype.allowEmpty = function (allowEmpty) {
+                if (allowEmpty === void 0) { allowEmpty = true; }
+                this._allowEmpty = allowEmpty;
+                return this;
+            };
+            ExclusionIn.prototype.getAllowEmpty = function () {
+                return this._allowEmpty;
+            };
+            ExclusionIn.prototype.domain = function (domain) {
+                this._domain = domain;
+                return this;
+            };
+            ExclusionIn.prototype.getDomain = function () {
+                return this._domain;
+            };
             return ExclusionIn;
-        })();
+        })(Validator);
         Validators.ExclusionIn = ExclusionIn;
     })(Validators = TSValidate.Validators || (TSValidate.Validators = {}));
 })(TSValidate || (TSValidate = {}));
@@ -410,11 +603,91 @@ var TSValidate;
 (function (TSValidate) {
     var Validators;
     (function (Validators) {
-        var InclusionIn = (function () {
+        var Validator = TSValidate.Validator;
+        var Message = TSValidate.Message;
+        var InclusionIn = (function (_super) {
+            __extends(InclusionIn, _super);
             function InclusionIn() {
+                _super.apply(this, arguments);
+                this._strict = false;
+                this._allowEmpty = false;
             }
+            InclusionIn.prototype.validate = function (validation, field) {
+                var value, domain, message, label, replacePairs, strict;
+                value = validation.getValue(field);
+                if (this.getAllowEmpty() && this.isEmpty(value)) {
+                    return true;
+                }
+                domain = this.getDomain();
+                if (!_.isArray(domain)) {
+                    throw new TSValidate.Exception('Option `domain` must be an array');
+                }
+                strict = this.getStrict();
+                if (!this.inArray(value, domain, strict)) {
+                    label = this.getLabel();
+                    if (!label) {
+                        label = validation.getLabel(field);
+                    }
+                    message = this.getMessage();
+                    replacePairs = [":field", label, ":domain", domain.join(', ')];
+                    if (!message) {
+                        message = validation.getDefaultMessage('ExclusionIn');
+                    }
+                    message = message.replace(replacePairs[0], replacePairs[1]);
+                    message = message.replace(replacePairs[2], replacePairs[3]);
+                    validation.appendMessage(new Message(message, field, "ExclusionIn"));
+                    return false;
+                }
+                return true;
+            };
+            InclusionIn.prototype.inArray = function (needle, haystack, strict) {
+                var _this = this;
+                if (strict === void 0) { strict = false; }
+                var inArray = false;
+                _.each(haystack, function (part) {
+                    if (_this.compare(part, needle, strict)) {
+                        inArray = true;
+                    }
+                });
+                return inArray;
+            };
+            InclusionIn.prototype.compare = function (a, b, strict) {
+                if (_.isObject(a) && _.isObject(b)) {
+                    if (strict) {
+                        return JSON.stringify(a) === JSON.stringify(b);
+                    }
+                    return JSON.stringify(a) == JSON.stringify(b);
+                }
+                if (strict) {
+                    return a === b;
+                }
+                return a == b;
+            };
+            InclusionIn.prototype.strict = function (strict) {
+                if (strict === void 0) { strict = true; }
+                this._strict = strict;
+                return this;
+            };
+            InclusionIn.prototype.getStrict = function () {
+                return this._strict;
+            };
+            InclusionIn.prototype.allowEmpty = function (allowEmpty) {
+                if (allowEmpty === void 0) { allowEmpty = true; }
+                this._allowEmpty = allowEmpty;
+                return this;
+            };
+            InclusionIn.prototype.getAllowEmpty = function () {
+                return this._allowEmpty;
+            };
+            InclusionIn.prototype.domain = function (domain) {
+                this._domain = domain;
+                return this;
+            };
+            InclusionIn.prototype.getDomain = function () {
+                return this._domain;
+            };
             return InclusionIn;
-        })();
+        })(Validator);
         Validators.InclusionIn = InclusionIn;
     })(Validators = TSValidate.Validators || (TSValidate.Validators = {}));
 })(TSValidate || (TSValidate = {}));
@@ -432,7 +705,7 @@ var TSValidate;
             PresenceOf.prototype.validate = function (validation, field) {
                 var value, message, label, replacePairs;
                 value = validation.getValue(field);
-                if (_.isNull(value) || value === "") {
+                if (_.isNull(value) || this.isEmpty(value)) {
                     var label = this.getLabel();
                     if (!label) {
                         label = validation.getLabel(field);
@@ -456,11 +729,57 @@ var TSValidate;
 (function (TSValidate) {
     var Validators;
     (function (Validators) {
-        var Regex = (function () {
+        var Validator = TSValidate.Validator;
+        var Message = TSValidate.Message;
+        var Regex = (function (_super) {
+            __extends(Regex, _super);
             function Regex() {
+                _super.apply(this, arguments);
+                this._allowEmpty = false;
             }
+            Regex.prototype.validate = function (validation, field) {
+                var matches, pattern, message, value, label, replacePairs;
+                matches = null;
+                value = validation.getValue(field);
+                if (this.getAllowEmpty() && this.isEmpty(value)) {
+                    return true;
+                }
+                if (!this.getPattern()) {
+                    throw new TSValidate.Exception("No pattern set");
+                }
+                pattern = this.getPattern();
+                if (!pattern.test(value)) {
+                    label = this.getLabel();
+                    if (!label) {
+                        label = validation.getLabel(field);
+                    }
+                    message = this.getMessage();
+                    replacePairs = [":field", label];
+                    if (!message) {
+                        validation.getDefaultMessage('Regex');
+                    }
+                    validation.appendMessage(new Message(message.replace(replacePairs[0], replacePairs[1]), field, 'Regex'));
+                    return false;
+                }
+                return true;
+            };
+            Regex.prototype.allowEmpty = function (allowEmpty) {
+                if (allowEmpty === void 0) { allowEmpty = true; }
+                this._allowEmpty = allowEmpty;
+                return this;
+            };
+            Regex.prototype.getAllowEmpty = function () {
+                return this._allowEmpty;
+            };
+            Regex.prototype.pattern = function (pattern) {
+                this._pattern = pattern;
+                return this;
+            };
+            Regex.prototype.getPattern = function () {
+                return this._pattern;
+            };
             return Regex;
-        })();
+        })(Validator);
         Validators.Regex = Regex;
     })(Validators = TSValidate.Validators || (TSValidate.Validators = {}));
 })(TSValidate || (TSValidate = {}));
@@ -468,11 +787,101 @@ var TSValidate;
 (function (TSValidate) {
     var Validators;
     (function (Validators) {
-        var StringLength = (function () {
+        var Validator = TSValidate.Validator;
+        var Message = TSValidate.Message;
+        var StringLength = (function (_super) {
+            __extends(StringLength, _super);
             function StringLength() {
+                _super.apply(this, arguments);
+                this._allowEmpty = false;
             }
+            StringLength.prototype.validate = function (validation, field) {
+                var isSetMin, isSetMax, value, length, message, minimum, maximum, label, replacePairs;
+                isSetMin = !_.isUndefined(this.getMin());
+                isSetMax = !_.isUndefined(this.getMax());
+                if (!isSetMin && !isSetMax) {
+                    throw new TSValidate.Exception("A minimum or maximum must be set");
+                }
+                value = validation.getValue(field);
+                if (this.getAllowEmpty() && this.isEmpty(value)) {
+                    return true;
+                }
+                label = this.getLabel();
+                if (!label) {
+                    label = validation.getLabel(field);
+                }
+                length = 0;
+                if (_.isString(value)) {
+                    length = value.length;
+                }
+                if (isSetMax) {
+                    maximum = this.getMax();
+                    if (length > maximum) {
+                        message = this.getMessageMaximum();
+                        replacePairs = [':field', label, ':max', maximum];
+                        if (!message) {
+                            message = validation.getDefaultMessage('TooLong');
+                        }
+                        message.replace(replacePairs[0], replacePairs[1]);
+                        message.replace(replacePairs[2], replacePairs[3]);
+                        validation.appendMessage(new Message(message, field, 'TooLong'));
+                        return false;
+                    }
+                }
+                if (isSetMin) {
+                    minimum = this.getMin();
+                    if (length < minimum) {
+                        message = this.getMessageMinimum();
+                        replacePairs = [':field', label, ':min', minimum];
+                        if (!message) {
+                            message = validation.getDefaultMessage('TooShort');
+                        }
+                        message.replace(replacePairs[0], replacePairs[1]);
+                        message.replace(replacePairs[1], replacePairs[2]);
+                        validation.appendMessage(new Message(message, field, "TooShort"));
+                        return false;
+                    }
+                }
+                return true;
+            };
+            StringLength.prototype.allowEmpty = function (allowEmpty) {
+                if (allowEmpty === void 0) { allowEmpty = true; }
+                this._allowEmpty = allowEmpty;
+                return this;
+            };
+            StringLength.prototype.getAllowEmpty = function () {
+                return this._allowEmpty;
+            };
+            StringLength.prototype.min = function (min) {
+                this._min = min;
+                return this;
+            };
+            StringLength.prototype.getMin = function () {
+                return this._min;
+            };
+            StringLength.prototype.max = function (max) {
+                this._max = max;
+                return this;
+            };
+            StringLength.prototype.getMax = function () {
+                return this._max;
+            };
+            StringLength.prototype.messageMinimum = function (messageMinimum) {
+                this._messageMinimum = messageMinimum;
+                return this;
+            };
+            StringLength.prototype.getMessageMinimum = function () {
+                return this._messageMinimum;
+            };
+            StringLength.prototype.messageMaximum = function (messageMaximum) {
+                this._messageMaximum = messageMaximum;
+                return this;
+            };
+            StringLength.prototype.getMessageMaximum = function () {
+                return this._messageMaximum;
+            };
             return StringLength;
-        })();
+        })(Validator);
         Validators.StringLength = StringLength;
     })(Validators = TSValidate.Validators || (TSValidate.Validators = {}));
 })(TSValidate || (TSValidate = {}));
@@ -480,11 +889,47 @@ var TSValidate;
 (function (TSValidate) {
     var Validators;
     (function (Validators) {
-        var Url = (function () {
+        var Validator = TSValidate.Validator;
+        var Message = TSValidate.Message;
+        var Url = (function (_super) {
+            __extends(Url, _super);
             function Url() {
+                _super.apply(this, arguments);
+                this._allowEmpty = false;
             }
+            Url.prototype.validate = function (validation, field) {
+                var value, message, label, replacePairs;
+                value = validation.getValue(field);
+                if (this.getAllowEmpty() && this.isEmpty(value)) {
+                    return true;
+                }
+                if (!Url.URL_REGEX.test(value)) {
+                    label = this.getLabel();
+                    if (!label) {
+                        label = validation.getLabel(field);
+                    }
+                    message = this.getMessage();
+                    replacePairs = [':field', label];
+                    if (!message) {
+                        message = validation.getDefaultMessage('Url');
+                    }
+                    message.replace(replacePairs[0], replacePairs[1]);
+                    validation.appendMessage(new Message(message, field, 'Url'));
+                    return false;
+                }
+                return true;
+            };
+            Url.prototype.allowEmpty = function (allowEmpty) {
+                if (allowEmpty === void 0) { allowEmpty = true; }
+                this._allowEmpty = allowEmpty;
+                return this;
+            };
+            Url.prototype.getAllowEmpty = function () {
+                return this._allowEmpty;
+            };
+            Url.URL_REGEX = /(http|ftp|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/;
             return Url;
-        })();
+        })(Validator);
         Validators.Url = Url;
     })(Validators = TSValidate.Validators || (TSValidate.Validators = {}));
 })(TSValidate || (TSValidate = {}));

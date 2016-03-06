@@ -48,8 +48,8 @@ module TSValidate.Validators {
                     labelAgainst = validation.getLabel(fieldAgainst);
                 }
 
-                let message = this.getMessage();
-                let replacePairs = [':field', label, ':against', labelAgainst];
+                message = this.getMessage();
+                replacePairs = [':field', label, ':against', labelAgainst];
 
                 if (!message) {
                     message = validation.getDefaultMessage('Confirmation');

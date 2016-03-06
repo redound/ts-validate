@@ -161,7 +161,7 @@ module TSValidate {
                 Alnum: "Field :field must contain only letters and numbers",
                 Alpha: "Field :field must contain only letters",
                 Between: "Field :field must be within the range of :min to :max",
-                Confirmation: "Field :field must be the same as :with",
+                Confirmation: "Field :field must be the same as :against",
                 Digit: "Field :field must be numeric",
                 Email: "Field :field must be an email address",
                 ExclusionIn: "Field :field must not be a part of list: :domain",

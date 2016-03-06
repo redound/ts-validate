@@ -72,6 +72,7 @@ declare module TSValidate {
         protected _label: string;
         protected _message: string;
         constructor(options?: any);
+        protected isEmpty(value: any): boolean;
         hasOption(key: string): boolean;
         getOption(key: string, defaultValue?: any): any;
         setOption(key: string, value: any): void;
@@ -83,11 +84,33 @@ declare module TSValidate {
     }
 }
 declare module TSValidate.Validators {
-    class Between {
+    import Validator = TSValidate.Validator;
+    class Between extends Validator {
+        protected _allowEmpty: boolean;
+        protected _minimum: number;
+        protected _maximum: number;
+        validate(validation: TSValidate.Validation, field: string): boolean;
+        allowEmpty(allowEmpty?: boolean): this;
+        minimum(minimum: number): this;
+        getMinimum(): number;
+        maximum(maximum: number): this;
+        getMaximum(): number;
     }
 }
 declare module TSValidate.Validators {
-    class Confirmation {
+    import Validator = TSValidate.Validator;
+    class Confirmation extends Validator {
+        protected _against: string;
+        protected _labelAgainst: string;
+        protected _ignoreCase: boolean;
+        validate(validation: TSValidate.Validation, field: string): boolean;
+        protected compare(a?: string, b?: string): boolean;
+        ignoreCase(ignoreCase?: boolean): this;
+        getIgnoreCase(): boolean;
+        against(against: string): this;
+        getAgainst(): string;
+        labelAgainst(labelAgainst: string): this;
+        getLabelAgainst(): string;
     }
 }
 declare module TSValidate.Validators {
@@ -101,7 +124,20 @@ declare module TSValidate.Validators {
     }
 }
 declare module TSValidate.Validators {
-    class ExclusionIn {
+    import Validator = TSValidate.Validator;
+    class ExclusionIn extends Validator {
+        protected _strict: boolean;
+        protected _allowEmpty: boolean;
+        protected _domain: any[];
+        validate(validation: TSValidate.Validation, field: string): boolean;
+        protected inArray(needle: any, haystack: any[], strict?: boolean): boolean;
+        protected compare(a: any, b: any, strict: boolean): boolean;
+        strict(strict?: boolean): this;
+        getStrict(): boolean;
+        allowEmpty(allowEmpty?: boolean): this;
+        getAllowEmpty(): boolean;
+        domain(domain: any[]): this;
+        getDomain(): any[];
     }
 }
 declare module TSValidate.Validators {
@@ -117,7 +153,20 @@ declare module TSValidate.Validators {
     }
 }
 declare module TSValidate.Validators {
-    class InclusionIn {
+    import Validator = TSValidate.Validator;
+    class InclusionIn extends Validator {
+        protected _strict: boolean;
+        protected _allowEmpty: boolean;
+        protected _domain: any[];
+        validate(validation: TSValidate.Validation, field: string): boolean;
+        protected inArray(needle: any, haystack: any[], strict?: boolean): boolean;
+        protected compare(a: any, b: any, strict: boolean): boolean;
+        strict(strict?: boolean): this;
+        getStrict(): boolean;
+        allowEmpty(allowEmpty?: boolean): this;
+        getAllowEmpty(): boolean;
+        domain(domain: any[]): this;
+        getDomain(): any[];
     }
 }
 declare module TSValidate.Validators {
@@ -127,14 +176,45 @@ declare module TSValidate.Validators {
     }
 }
 declare module TSValidate.Validators {
-    class Regex {
+    import Validator = TSValidate.Validator;
+    class Regex extends Validator {
+        protected _allowEmpty: boolean;
+        protected _pattern: RegExp;
+        validate(validation: TSValidate.Validation, field: string): boolean;
+        allowEmpty(allowEmpty?: boolean): this;
+        getAllowEmpty(): boolean;
+        pattern(pattern: RegExp): this;
+        getPattern(): RegExp;
     }
 }
 declare module TSValidate.Validators {
-    class StringLength {
+    import Validator = TSValidate.Validator;
+    class StringLength extends Validator {
+        protected _allowEmpty: boolean;
+        protected _min: number;
+        protected _max: number;
+        protected _messageMinimum: string;
+        protected _messageMaximum: string;
+        validate(validation: TSValidate.Validation, field: string): boolean;
+        allowEmpty(allowEmpty?: boolean): this;
+        getAllowEmpty(): boolean;
+        min(min: number): this;
+        getMin(): number;
+        max(max: number): this;
+        getMax(): number;
+        messageMinimum(messageMinimum: string): this;
+        getMessageMinimum(): string;
+        messageMaximum(messageMaximum: string): this;
+        getMessageMaximum(): string;
     }
 }
 declare module TSValidate.Validators {
-    class Url {
+    import Validator = TSValidate.Validator;
+    class Url extends Validator {
+        static URL_REGEX: RegExp;
+        protected _allowEmpty: boolean;
+        validate(validation: TSValidate.Validation, field: string): boolean;
+        allowEmpty(allowEmpty?: boolean): this;
+        getAllowEmpty(): boolean;
     }
 }
