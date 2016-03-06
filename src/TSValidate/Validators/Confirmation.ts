@@ -9,8 +9,7 @@ module TSValidate.Validators {
     /**
      * TSValidate.Validators.Confirmation
      *
-     * Validates that a value is between an inclusive range of two values.
-     * For a value x, the test is passed if minimum<=x<=maximum.
+     * Checks that two values have the same value
      *
      *<code>
      *import Confirmation = TSValidate.Validators.Confirmation;
