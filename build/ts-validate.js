@@ -764,6 +764,7 @@ var TSValidate;
     var Email = TSValidate.Validators.Email;
     var ExclusionIn = TSValidate.Validators.ExclusionIn;
     var Identical = TSValidate.Validators.Identical;
+    var InclusionIn = TSValidate.Validators.InclusionIn;
     var PresenceOf = TSValidate.Validators.PresenceOf;
     var Regex = TSValidate.Validators.Regex;
     var StringLength = TSValidate.Validators.StringLength;
@@ -849,7 +850,7 @@ var TSValidate;
             return this;
         };
         Validation.prototype.inclusionIn = function (field, domain, message) {
-            this.add(field, new ExclusionIn()
+            this.add(field, new InclusionIn()
                 .domain(domain)
                 .message(message));
             return this;
@@ -975,7 +976,7 @@ var TSValidate;
                 }
                 else {
                     if (entity['get'] instanceof Function) {
-                        value = entity['get']();
+                        value = entity['get'](field);
                     }
                     else {
                         if (!_.isUndefined(entity[field])) {

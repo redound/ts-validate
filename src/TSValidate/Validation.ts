@@ -209,7 +209,7 @@ module TSValidate {
          */
         public inclusionIn(field:string, domain:any[], message?:string):this {
 
-            this.add(field, new ExclusionIn()
+            this.add(field, new InclusionIn()
                 .domain(domain)
                 .message(message)
             );
@@ -490,7 +490,7 @@ module TSValidate {
                 } else {
 
                     if (entity['get'] instanceof Function) {
-                        value = entity['get']();
+                        value = entity['get'](field);
                     } else {
                         if (!_.isUndefined(entity[field])) {
                             value = entity[field];
