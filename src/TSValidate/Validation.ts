@@ -409,7 +409,7 @@ module TSValidate {
          */
         public getMessages():TSCore.Data.Collection<MessageInterface> {
 
-            return this._messages;
+            return this._messages.clone();
         }
 
         /**
