@@ -61,6 +61,7 @@ module.exports = function(grunt) {
 
         var contents = grunt.file.read('./build/ts-validate.d.ts');
         contents = contents.replace("/// <reference path=\"../typings/tsd.d.ts\" />\n", "");
+        contents = contents.replace("/// <reference path=\"../node_modules/ts-core/build/ts-core.d.ts\" />\n", "");
         grunt.file.write('./build/ts-validate.d.ts', contents);
     });
 
