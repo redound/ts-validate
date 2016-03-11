@@ -22,13 +22,13 @@ module TSValidate.Validators {
      */
     export class Confirmation extends Validator {
 
-        protected _against: string;
+        protected _against:string;
 
-        protected _labelAgainst: string;
+        protected _labelAgainst:string;
 
-        protected _ignoreCase: boolean = false;
+        protected _ignoreCase:boolean = false;
 
-        public validate(validation: TSValidate.Validation, field: string): boolean {
+        public validate(validation:TSValidate.Validation, field:string):boolean {
 
             var fieldAgainst, value, valueAgainst, message, label, labelAgainst, replacePairs;
 
@@ -65,7 +65,7 @@ module TSValidate.Validators {
             return true;
         }
 
-        protected compare(a: string = '', b: string = ''): boolean {
+        protected compare(a:string = '', b:string = ''):boolean {
 
             if (this.getIgnoreCase()) {
                 return a.toLowerCase() === b.toLowerCase();
@@ -74,30 +74,30 @@ module TSValidate.Validators {
             return a === b;
         }
 
-        public ignoreCase(ignoreCase: boolean = true): this {
+        public ignoreCase(ignoreCase:boolean = true):this {
             this._ignoreCase = ignoreCase;
             return this;
         }
 
-        public getIgnoreCase(): boolean {
+        public getIgnoreCase():boolean {
             return this._ignoreCase;
         }
 
-        public against(against: string): this {
+        public against(against:string):this {
             this._against = against;
             return this;
         }
 
-        public getAgainst(): string {
+        public getAgainst():string {
             return this._against;
         }
 
-        public labelAgainst(labelAgainst: string): this {
+        public labelAgainst(labelAgainst:string):this {
             this._labelAgainst = labelAgainst;
             return this;
         }
 
-        public getLabelAgainst(): string {
+        public getLabelAgainst():string {
             return this._labelAgainst;
         }
     }

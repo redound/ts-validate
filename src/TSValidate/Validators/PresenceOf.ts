@@ -21,7 +21,7 @@ module TSValidate.Validators {
      */
     export class PresenceOf extends Validator {
 
-        public validate(validation: TSValidate.Validation, field: string): boolean {
+        public validate(validation:TSValidate.Validation, field:string):boolean {
 
             var value:any, message:string, label:string, replacePairs:string[];
 

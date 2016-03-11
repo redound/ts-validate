@@ -23,9 +23,9 @@ module TSValidate.Validators {
 
         public static EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-        protected _allowEmpty: boolean = false;
+        protected _allowEmpty:boolean = false;
 
-        public validate(validation: TSValidate.Validation, field: string): boolean {
+        public validate(validation:TSValidate.Validation, field:string):boolean {
 
             var value, message, label, replacePairs;
 
@@ -57,12 +57,12 @@ module TSValidate.Validators {
             return true;
         }
 
-        public allowEmpty(allowEmpty: boolean = true): this {
+        public allowEmpty(allowEmpty:boolean = true):this {
             this._allowEmpty = allowEmpty;
             return this;
         }
 
-        public getAllowEmpty(): boolean {
+        public getAllowEmpty():boolean {
             return this._allowEmpty;
         }
     }

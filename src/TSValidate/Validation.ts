@@ -1,6 +1,27 @@
-///<reference path="Exception.ts"/>
+/// <reference path="Exception.ts"/>
+/// <reference path="Validators/Between.ts"/>
+/// <reference path="Validators/Confirmation.ts"/>
+/// <reference path="Validators/Email.ts"/>
+/// <reference path="Validators/ExclusionIn.ts"/>
+/// <reference path="Validators/Identical.ts"/>
+/// <reference path="Validators/InclusionIn.ts"/>
+/// <reference path="Validators/PresenceOf.ts"/>
+/// <reference path="Validators/Regex.ts"/>
+/// <reference path="Validators/StringLength.ts"/>
+/// <reference path="Validators/Url.ts"/>
 
 module TSValidate {
+
+    import Between = TSValidate.Validators.Between;
+    import Confirmation = TSValidate.Validators.Confirmation;
+    import Email = TSValidate.Validators.Email;
+    import ExclusionIn = TSValidate.Validators.ExclusionIn;
+    import Identical = TSValidate.Validators.Identical;
+    import InclusionIn = TSValidate.Validators.InclusionIn;
+    import PresenceOf = TSValidate.Validators.PresenceOf;
+    import Regex = TSValidate.Validators.Regex;
+    import StringLength = TSValidate.Validators.StringLength;
+    import Url = TSValidate.Validators.Url;
 
     export class Validation {
 
@@ -10,11 +31,11 @@ module TSValidate {
 
         protected _validators:TSCore.Data.Dictionary<string, ValidatorInterface> = new TSCore.Data.Dictionary<string, ValidatorInterface>();
 
-        protected _messages: TSCore.Data.Collection<MessageInterface> = new TSCore.Data.Collection<MessageInterface>();
+        protected _messages:TSCore.Data.Collection<MessageInterface> = new TSCore.Data.Collection<MessageInterface>();
 
-        protected _defaultMessages: any;
+        protected _defaultMessages:any;
 
-        protected _labels: TSCore.Data.Dictionary<string, string> = new TSCore.Data.Dictionary<string, string>();
+        protected _labels:TSCore.Data.Dictionary<string, string> = new TSCore.Data.Dictionary<string, string>();
 
         protected _values;
 
@@ -75,7 +96,7 @@ module TSValidate {
                 this._data = data;
             }
 
-            validators.each((field, validator: ValidatorInterface) => {
+            validators.each((field, validator:ValidatorInterface) => {
 
                 if (!(validator instanceof Validator)) {
                     throw new Exception("One of the validators is not valid");
@@ -107,6 +128,185 @@ module TSValidate {
         }
 
         /**
+         * Shorthand - PresenceOf
+         *
+         * @param field
+         * @param message
+         * @returns {TSValidate.Validation}
+         */
+        public presenceOf(field:string, message?:string):this {
+
+            this.add(field, new PresenceOf()
+                .message(message)
+            );
+
+            return this;
+        }
+
+        /**
+         * Shorthand - Identical
+         *
+         * @param field
+         * @param accepted
+         * @param message
+         * @returns {TSValidate.Validation}
+         */
+        public identical(field:string, accepted:any = true, message?:string):this {
+
+            this.add(field, new Identical()
+                .accepted(accepted)
+                .message(message)
+            );
+
+            return this;
+        }
+
+        /**
+         * Shorthand - Email
+         *
+         * @param field
+         * @param message
+         * @returns {TSValidate.Validation}
+         */
+        public email(field:string, message?:string):this {
+
+            this.add(field, new Email()
+                .message(message)
+            );
+
+            return this;
+        }
+
+        /**
+         * Shorthand - ExclusionIn
+         *
+         * @param field
+         * @param domain
+         * @param message
+         * @returns {TSValidate.Validation}
+         */
+        public exclusionIn(field:string, domain:any[], message?:string):this {
+
+            this.add(field, new ExclusionIn()
+                .domain(domain)
+                .message(message)
+            );
+
+            return this;
+        }
+
+        /**
+         * Shorthand - InclusionIn
+         *
+         * @param field
+         * @param domain
+         * @param message
+         * @returns {TSValidate.Validation}
+         */
+        public inclusionIn(field:string, domain:any[], message?:string):this {
+
+            this.add(field, new ExclusionIn()
+                .domain(domain)
+                .message(message)
+            );
+
+            return this;
+        }
+
+        /**
+         * Shorthand - Regex
+         *
+         * @param field
+         * @param pattern
+         * @param message
+         * @returns {TSValidate.Validation}
+         */
+        public regex(field:string, pattern:RegExp, message?:string):this {
+
+            this.add(field, new Regex()
+                .pattern(pattern)
+                .message(message)
+            );
+
+            return this;
+        }
+
+        /**
+         * Shorthand - StringLength
+         *
+         * @param field
+         * @param min
+         * @param max
+         * @param messageMinimum
+         * @param messageMaximum
+         * @returns {TSValidate.Validation}
+         */
+        public stringLength(field:string, min:number, max:number, messageMinimum?:string, messageMaximum?:string):this {
+
+            this.add(field, new StringLength()
+                .min(min)
+                .max(max)
+                .messageMinimum(messageMinimum)
+                .messageMaximum(messageMaximum)
+            );
+
+            return this;
+        }
+
+        /**
+         * Shorthand - Between
+         *
+         * @param field
+         * @param minimum
+         * @param maximum
+         * @param message
+         * @returns {TSValidate.Validation}
+         */
+        public between(field:string, minimum:number, maximum:number, message?:string):this {
+
+            this.add(field, new Between()
+                .minimum(minimum)
+                .maximum(maximum)
+                .message(message)
+            );
+
+            return this;
+        }
+
+        /**
+         * Shorthand - Confirmation
+         * @param field
+         * @param against
+         * @param message
+         * @returns {TSValidate.Validation}
+         */
+        public confirmation(field:string, against:string, message?:string):this {
+
+            this.add(field, new Confirmation()
+                .against(against)
+                .message(message)
+            );
+
+            return this;
+        }
+
+        /**
+         * Shorthand - Url
+         *
+         * @param field
+         * @param message
+         * @returns {TSValidate.Validation}
+         */
+        public url(field:string, message?:string):this {
+
+            this.add(field, new Url()
+                .message(message)
+            );
+
+            return this;
+        }
+
+        /**
          * Alias of `add` method
          *
          * @param field
@@ -134,7 +334,7 @@ module TSValidate {
          *
          * @returns {TSCore.Data.Dictionary<string, ValidatorInterface>}
          */
-        public getValidators(): TSCore.Data.Dictionary<string, ValidatorInterface> {
+        public getValidators():TSCore.Data.Dictionary<string, ValidatorInterface> {
 
             return this._validators;
         }
@@ -155,7 +355,7 @@ module TSValidate {
          * @param messages
          * @returns {*}
          */
-        public setDefaultMessages(messages: any = {}): any {
+        public setDefaultMessages(messages:any = {}):any {
 
             var defaultMessages = {
                 Alnum: "Field :field must contain only letters and numbers",
@@ -193,7 +393,7 @@ module TSValidate {
          * @param type
          * @returns {any}
          */
-        public getDefaultMessage(type: string): string {
+        public getDefaultMessage(type:string):string {
 
             if (_.isUndefined(this._defaultMessages[type])) {
                 return "";
@@ -207,7 +407,7 @@ module TSValidate {
          *
          * @returns {any}
          */
-        public getMessages(): TSCore.Data.Collection<MessageInterface> {
+        public getMessages():TSCore.Data.Collection<MessageInterface> {
 
             return this._messages;
         }
@@ -217,7 +417,7 @@ module TSValidate {
          *
          * @param labels
          */
-        public setLabels(labels: TSCore.Data.Dictionary<string, string>) {
+        public setLabels(labels:TSCore.Data.Dictionary<string, string>) {
 
             this._labels = labels;
         }
@@ -228,7 +428,7 @@ module TSValidate {
          * @param field
          * @returns {string|V}
          */
-        public getLabel(field: string) {
+        public getLabel(field:string) {
 
             return this._labels.get(field);
         }
@@ -239,7 +439,7 @@ module TSValidate {
          * @param message
          * @returns {TSValidate.Validation}
          */
-        public appendMessage(message: MessageInterface): this {
+        public appendMessage(message:MessageInterface):this {
 
             this._messages.add(message);
             return this;
@@ -253,7 +453,7 @@ module TSValidate {
          * @param data
          * @returns {TSValidate.Validation}
          */
-        public bind(entity: any, data: any): this {
+        public bind(entity:any, data:any):this {
 
             if (!_.isObject(entity)) {
                 throw new Exception("Entity must be an object");
@@ -273,9 +473,9 @@ module TSValidate {
          * Gets the value to validate in the object data source
          * @param field
          */
-        public getValue(field: string) {
+        public getValue(field:string) {
 
-            var entity, method: string, value: any, data, values, filters;
+            var entity, method:string, value:any, data, values, filters;
 
             entity = this._entity;
 

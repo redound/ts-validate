@@ -1,4 +1,5 @@
 /// <reference path="../node_modules/ts-core/build/ts-core.d.ts" />
+/// <reference path="../typings/tsd.d.ts" />
 declare module TSValidate {
     class Exception extends TSCore.Exception.Exception {
     }
@@ -29,35 +30,6 @@ declare module TSValidate {
     }
 }
 declare module TSValidate {
-}
-declare module TSValidate {
-    class Validation {
-        protected _data: any;
-        protected _entity: any;
-        protected _validators: TSCore.Data.Dictionary<string, ValidatorInterface>;
-        protected _messages: TSCore.Data.Collection<MessageInterface>;
-        protected _defaultMessages: any;
-        protected _labels: TSCore.Data.Dictionary<string, string>;
-        protected _values: any;
-        construct(validators: TSCore.Data.Dictionary<string, ValidatorInterface>): void;
-        initialize(): void;
-        protected beforeValidation(data: any, entity: any, messages: TSCore.Data.Collection<MessageInterface>): void;
-        protected afterValidation(data: any, entity: any, messages: TSCore.Data.Collection<MessageInterface>): void;
-        validate(data?: any, entity?: any): TSCore.Data.Collection<MessageInterface>;
-        add(field: string, validator: ValidatorInterface): this;
-        rule(field: string, validator: ValidatorInterface): this;
-        rules(field: string, validators?: ValidatorInterface[]): this;
-        getValidators(): TSCore.Data.Dictionary<string, ValidatorInterface>;
-        getEntity(): any;
-        setDefaultMessages(messages?: any): any;
-        getDefaultMessage(type: string): string;
-        getMessages(): TSCore.Data.Collection<MessageInterface>;
-        setLabels(labels: TSCore.Data.Dictionary<string, string>): void;
-        getLabel(field: string): string;
-        appendMessage(message: MessageInterface): this;
-        bind(entity: any, data: any): this;
-        getValue(field: string): any;
-    }
 }
 declare module TSValidate {
     interface ValidatorInterface {
@@ -216,5 +188,44 @@ declare module TSValidate.Validators {
         validate(validation: TSValidate.Validation, field: string): boolean;
         allowEmpty(allowEmpty?: boolean): this;
         getAllowEmpty(): boolean;
+    }
+}
+declare module TSValidate {
+    class Validation {
+        protected _data: any;
+        protected _entity: any;
+        protected _validators: TSCore.Data.Dictionary<string, ValidatorInterface>;
+        protected _messages: TSCore.Data.Collection<MessageInterface>;
+        protected _defaultMessages: any;
+        protected _labels: TSCore.Data.Dictionary<string, string>;
+        protected _values: any;
+        construct(validators: TSCore.Data.Dictionary<string, ValidatorInterface>): void;
+        initialize(): void;
+        protected beforeValidation(data: any, entity: any, messages: TSCore.Data.Collection<MessageInterface>): void;
+        protected afterValidation(data: any, entity: any, messages: TSCore.Data.Collection<MessageInterface>): void;
+        validate(data?: any, entity?: any): TSCore.Data.Collection<MessageInterface>;
+        add(field: string, validator: ValidatorInterface): this;
+        presenceOf(field: string, message?: string): this;
+        identical(field: string, accepted?: any, message?: string): this;
+        email(field: string, message?: string): this;
+        exclusionIn(field: string, domain: any[], message?: string): this;
+        inclusionIn(field: string, domain: any[], message?: string): this;
+        regex(field: string, pattern: RegExp, message?: string): this;
+        stringLength(field: string, min: number, max: number, messageMinimum?: string, messageMaximum?: string): this;
+        between(field: string, minimum: number, maximum: number, message?: string): this;
+        confirmation(field: string, against: string, message?: string): this;
+        url(field: string, message?: string): this;
+        rule(field: string, validator: ValidatorInterface): this;
+        rules(field: string, validators?: ValidatorInterface[]): this;
+        getValidators(): TSCore.Data.Dictionary<string, ValidatorInterface>;
+        getEntity(): any;
+        setDefaultMessages(messages?: any): any;
+        getDefaultMessage(type: string): string;
+        getMessages(): TSCore.Data.Collection<MessageInterface>;
+        setLabels(labels: TSCore.Data.Dictionary<string, string>): void;
+        getLabel(field: string): string;
+        appendMessage(message: MessageInterface): this;
+        bind(entity: any, data: any): this;
+        getValue(field: string): any;
     }
 }

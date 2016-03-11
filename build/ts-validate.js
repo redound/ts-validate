@@ -52,182 +52,6 @@ var TSValidate;
 })(TSValidate || (TSValidate = {}));
 var TSValidate;
 (function (TSValidate) {
-    var Validation = (function () {
-        function Validation() {
-            this._validators = new TSCore.Data.Dictionary();
-            this._messages = new TSCore.Data.Collection();
-            this._labels = new TSCore.Data.Dictionary();
-        }
-        Validation.prototype.construct = function (validators) {
-            this._validators = validators;
-            this.setDefaultMessages();
-            this.initialize();
-        };
-        Validation.prototype.initialize = function () {
-        };
-        Validation.prototype.beforeValidation = function (data, entity, messages) {
-        };
-        Validation.prototype.afterValidation = function (data, entity, messages) {
-        };
-        Validation.prototype.validate = function (data, entity) {
-            var _this = this;
-            if (data === void 0) { data = null; }
-            if (entity === void 0) { entity = null; }
-            var validators, messages, field, validator, status;
-            validators = this._validators;
-            if (validators.isEmpty()) {
-                throw new TSValidate.Exception("There are no validators to validate");
-            }
-            this._values = null;
-            messages = new TSCore.Data.Collection();
-            status = this.beforeValidation(data, entity, messages);
-            if (status === false) {
-                return status;
-            }
-            this._messages = messages;
-            if (_.isArray(data) || _.isObject(data)) {
-                this._data = data;
-            }
-            validators.each(function (field, validator) {
-                if (!(validator instanceof TSValidate.Validator)) {
-                    throw new TSValidate.Exception("One of the validators is not valid");
-                }
-                if (validator.validate(_this, field) === false) {
-                    if (validator.getOption("cancelOnFail")) {
-                        return;
-                    }
-                }
-            });
-            messages = this._messages;
-            this.afterValidation(data, entity, messages);
-            return messages;
-        };
-        Validation.prototype.add = function (field, validator) {
-            this._validators.set(field, validator);
-            return this;
-        };
-        Validation.prototype.rule = function (field, validator) {
-            return this.add(field, validator);
-        };
-        Validation.prototype.rules = function (field, validators) {
-            var _this = this;
-            if (validators === void 0) { validators = []; }
-            _.each(validators, function (validator) {
-                if (validator instanceof TSValidate.Validator) {
-                    _this._validators.set(field, validator);
-                }
-            });
-            return this;
-        };
-        Validation.prototype.getValidators = function () {
-            return this._validators;
-        };
-        Validation.prototype.getEntity = function () {
-            return this._entity;
-        };
-        Validation.prototype.setDefaultMessages = function (messages) {
-            if (messages === void 0) { messages = {}; }
-            var defaultMessages = {
-                Alnum: "Field :field must contain only letters and numbers",
-                Alpha: "Field :field must contain only letters",
-                Between: "Field :field must be within the range of :min to :max",
-                Confirmation: "Field :field must be the same as :against",
-                Digit: "Field :field must be numeric",
-                Email: "Field :field must be an email address",
-                ExclusionIn: "Field :field must not be a part of list: :domain",
-                FileEmpty: "Field :field must not be empty",
-                FileIniSize: "File :field exceeds the maximum file size",
-                FileMaxResolution: "File :field must not exceed :max resolution",
-                FileMinResolution: "File :field must be at least :min resolution",
-                FileSize: "File :field exceeds the size of :max",
-                FileType: "File :field must be of type: :types",
-                FileValid: "Field :field is not valid",
-                Identical: "Field :field does not have the expected value",
-                InclusionIn: "Field :field must be a part of list: :domain",
-                Numericality: "Field :field does not have a valid numeric format",
-                PresenceOf: "Field :field is required",
-                Regex: "Field :field does not match the required format",
-                TooLong: "Field :field must not exceed :max characters long",
-                TooShort: "Field :field must be at least :min characters long",
-                Uniqueness: "Field :field must be unique",
-                Url: "Field :field must be a url",
-                CreditCard: "Field :field is not valid for a credit card number"
-            };
-            return this._defaultMessages = _.extend(defaultMessages, messages);
-        };
-        Validation.prototype.getDefaultMessage = function (type) {
-            if (_.isUndefined(this._defaultMessages[type])) {
-                return "";
-            }
-            return this._defaultMessages[type];
-        };
-        Validation.prototype.getMessages = function () {
-            return this._messages;
-        };
-        Validation.prototype.setLabels = function (labels) {
-            this._labels = labels;
-        };
-        Validation.prototype.getLabel = function (field) {
-            return this._labels.get(field);
-        };
-        Validation.prototype.appendMessage = function (message) {
-            this._messages.add(message);
-            return this;
-        };
-        Validation.prototype.bind = function (entity, data) {
-            if (!_.isObject(entity)) {
-                throw new TSValidate.Exception("Entity must be an object");
-            }
-            if (!_.isObject(data)) {
-                throw new TSValidate.Exception("Data to validate must be an object");
-            }
-            this._entity = entity;
-            this._data = data;
-            return this;
-        };
-        Validation.prototype.getValue = function (field) {
-            var entity, method, value, data, values, filters;
-            entity = this._entity;
-            if (_.isObject(entity)) {
-                method = "get" + field;
-                if (entity[method] instanceof Function) {
-                    value = entity[method]();
-                }
-                else {
-                    if (entity['get'] instanceof Function) {
-                        value = entity['get']();
-                    }
-                    else {
-                        if (!_.isUndefined(entity[field])) {
-                            value = entity[field];
-                        }
-                        else {
-                            value = null;
-                        }
-                    }
-                }
-                return value;
-            }
-            data = this._data;
-            if (!_.isObject(data)) {
-                throw new TSValidate.Exception("There is no data to validate");
-            }
-            values = this._values;
-            if (values && !_.isUndefined(values[field])) {
-                return values[field];
-            }
-            value = null;
-            if (!_.isUndefined(data[field])) {
-                return data[field];
-            }
-            return value;
-        };
-        return Validation;
-    })();
-    TSValidate.Validation = Validation;
-})(TSValidate || (TSValidate = {}));
-var TSValidate;
-(function (TSValidate) {
     var Validator = (function () {
         function Validator(options) {
             if (options === void 0) { options = {}; }
@@ -932,5 +756,251 @@ var TSValidate;
         })(Validator);
         Validators.Url = Url;
     })(Validators = TSValidate.Validators || (TSValidate.Validators = {}));
+})(TSValidate || (TSValidate = {}));
+var TSValidate;
+(function (TSValidate) {
+    var Between = TSValidate.Validators.Between;
+    var Confirmation = TSValidate.Validators.Confirmation;
+    var Email = TSValidate.Validators.Email;
+    var ExclusionIn = TSValidate.Validators.ExclusionIn;
+    var Identical = TSValidate.Validators.Identical;
+    var PresenceOf = TSValidate.Validators.PresenceOf;
+    var Regex = TSValidate.Validators.Regex;
+    var StringLength = TSValidate.Validators.StringLength;
+    var Url = TSValidate.Validators.Url;
+    var Validation = (function () {
+        function Validation() {
+            this._validators = new TSCore.Data.Dictionary();
+            this._messages = new TSCore.Data.Collection();
+            this._labels = new TSCore.Data.Dictionary();
+        }
+        Validation.prototype.construct = function (validators) {
+            this._validators = validators;
+            this.setDefaultMessages();
+            this.initialize();
+        };
+        Validation.prototype.initialize = function () {
+        };
+        Validation.prototype.beforeValidation = function (data, entity, messages) {
+        };
+        Validation.prototype.afterValidation = function (data, entity, messages) {
+        };
+        Validation.prototype.validate = function (data, entity) {
+            var _this = this;
+            if (data === void 0) { data = null; }
+            if (entity === void 0) { entity = null; }
+            var validators, messages, field, validator, status;
+            validators = this._validators;
+            if (validators.isEmpty()) {
+                throw new TSValidate.Exception("There are no validators to validate");
+            }
+            this._values = null;
+            messages = new TSCore.Data.Collection();
+            status = this.beforeValidation(data, entity, messages);
+            if (status === false) {
+                return status;
+            }
+            this._messages = messages;
+            if (_.isArray(data) || _.isObject(data)) {
+                this._data = data;
+            }
+            validators.each(function (field, validator) {
+                if (!(validator instanceof TSValidate.Validator)) {
+                    throw new TSValidate.Exception("One of the validators is not valid");
+                }
+                if (validator.validate(_this, field) === false) {
+                    if (validator.getOption("cancelOnFail")) {
+                        return;
+                    }
+                }
+            });
+            messages = this._messages;
+            this.afterValidation(data, entity, messages);
+            return messages;
+        };
+        Validation.prototype.add = function (field, validator) {
+            this._validators.set(field, validator);
+            return this;
+        };
+        Validation.prototype.presenceOf = function (field, message) {
+            this.add(field, new PresenceOf()
+                .message(message));
+            return this;
+        };
+        Validation.prototype.identical = function (field, accepted, message) {
+            if (accepted === void 0) { accepted = true; }
+            this.add(field, new Identical()
+                .accepted(accepted)
+                .message(message));
+            return this;
+        };
+        Validation.prototype.email = function (field, message) {
+            this.add(field, new Email()
+                .message(message));
+            return this;
+        };
+        Validation.prototype.exclusionIn = function (field, domain, message) {
+            this.add(field, new ExclusionIn()
+                .domain(domain)
+                .message(message));
+            return this;
+        };
+        Validation.prototype.inclusionIn = function (field, domain, message) {
+            this.add(field, new ExclusionIn()
+                .domain(domain)
+                .message(message));
+            return this;
+        };
+        Validation.prototype.regex = function (field, pattern, message) {
+            this.add(field, new Regex()
+                .pattern(pattern)
+                .message(message));
+            return this;
+        };
+        Validation.prototype.stringLength = function (field, min, max, messageMinimum, messageMaximum) {
+            this.add(field, new StringLength()
+                .min(min)
+                .max(max)
+                .messageMinimum(messageMinimum)
+                .messageMaximum(messageMaximum));
+            return this;
+        };
+        Validation.prototype.between = function (field, minimum, maximum, message) {
+            this.add(field, new Between()
+                .minimum(minimum)
+                .maximum(maximum)
+                .message(message));
+            return this;
+        };
+        Validation.prototype.confirmation = function (field, against, message) {
+            this.add(field, new Confirmation()
+                .against(against)
+                .message(message));
+            return this;
+        };
+        Validation.prototype.url = function (field, message) {
+            this.add(field, new Url()
+                .message(message));
+            return this;
+        };
+        Validation.prototype.rule = function (field, validator) {
+            return this.add(field, validator);
+        };
+        Validation.prototype.rules = function (field, validators) {
+            var _this = this;
+            if (validators === void 0) { validators = []; }
+            _.each(validators, function (validator) {
+                if (validator instanceof TSValidate.Validator) {
+                    _this._validators.set(field, validator);
+                }
+            });
+            return this;
+        };
+        Validation.prototype.getValidators = function () {
+            return this._validators;
+        };
+        Validation.prototype.getEntity = function () {
+            return this._entity;
+        };
+        Validation.prototype.setDefaultMessages = function (messages) {
+            if (messages === void 0) { messages = {}; }
+            var defaultMessages = {
+                Alnum: "Field :field must contain only letters and numbers",
+                Alpha: "Field :field must contain only letters",
+                Between: "Field :field must be within the range of :min to :max",
+                Confirmation: "Field :field must be the same as :against",
+                Digit: "Field :field must be numeric",
+                Email: "Field :field must be an email address",
+                ExclusionIn: "Field :field must not be a part of list: :domain",
+                FileEmpty: "Field :field must not be empty",
+                FileIniSize: "File :field exceeds the maximum file size",
+                FileMaxResolution: "File :field must not exceed :max resolution",
+                FileMinResolution: "File :field must be at least :min resolution",
+                FileSize: "File :field exceeds the size of :max",
+                FileType: "File :field must be of type: :types",
+                FileValid: "Field :field is not valid",
+                Identical: "Field :field does not have the expected value",
+                InclusionIn: "Field :field must be a part of list: :domain",
+                Numericality: "Field :field does not have a valid numeric format",
+                PresenceOf: "Field :field is required",
+                Regex: "Field :field does not match the required format",
+                TooLong: "Field :field must not exceed :max characters long",
+                TooShort: "Field :field must be at least :min characters long",
+                Uniqueness: "Field :field must be unique",
+                Url: "Field :field must be a url",
+                CreditCard: "Field :field is not valid for a credit card number"
+            };
+            return this._defaultMessages = _.extend(defaultMessages, messages);
+        };
+        Validation.prototype.getDefaultMessage = function (type) {
+            if (_.isUndefined(this._defaultMessages[type])) {
+                return "";
+            }
+            return this._defaultMessages[type];
+        };
+        Validation.prototype.getMessages = function () {
+            return this._messages;
+        };
+        Validation.prototype.setLabels = function (labels) {
+            this._labels = labels;
+        };
+        Validation.prototype.getLabel = function (field) {
+            return this._labels.get(field);
+        };
+        Validation.prototype.appendMessage = function (message) {
+            this._messages.add(message);
+            return this;
+        };
+        Validation.prototype.bind = function (entity, data) {
+            if (!_.isObject(entity)) {
+                throw new TSValidate.Exception("Entity must be an object");
+            }
+            if (!_.isObject(data)) {
+                throw new TSValidate.Exception("Data to validate must be an object");
+            }
+            this._entity = entity;
+            this._data = data;
+            return this;
+        };
+        Validation.prototype.getValue = function (field) {
+            var entity, method, value, data, values, filters;
+            entity = this._entity;
+            if (_.isObject(entity)) {
+                method = "get" + field;
+                if (entity[method] instanceof Function) {
+                    value = entity[method]();
+                }
+                else {
+                    if (entity['get'] instanceof Function) {
+                        value = entity['get']();
+                    }
+                    else {
+                        if (!_.isUndefined(entity[field])) {
+                            value = entity[field];
+                        }
+                        else {
+                            value = null;
+                        }
+                    }
+                }
+                return value;
+            }
+            data = this._data;
+            if (!_.isObject(data)) {
+                throw new TSValidate.Exception("There is no data to validate");
+            }
+            values = this._values;
+            if (values && !_.isUndefined(values[field])) {
+                return values[field];
+            }
+            value = null;
+            if (!_.isUndefined(data[field])) {
+                return data[field];
+            }
+            return value;
+        };
+        return Validation;
+    })();
+    TSValidate.Validation = Validation;
 })(TSValidate || (TSValidate = {}));
 //# sourceMappingURL=ts-validate.js.map

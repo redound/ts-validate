@@ -6,11 +6,11 @@ module TSValidate {
 
         protected _options;
 
-        protected _label: string;
+        protected _label:string;
 
-        protected _message: string;
+        protected _message:string;
 
-        public constructor(options: any = {}) {
+        public constructor(options:any = {}) {
 
             this._options = options;
         }
@@ -24,7 +24,7 @@ module TSValidate {
          * @param key
          * @returns {boolean}
          */
-        public hasOption(key: string): boolean {
+        public hasOption(key:string):boolean {
             return !_.isUndefined(this._options[key]);
         }
 
@@ -35,7 +35,7 @@ module TSValidate {
          * @param defaultValue
          * @returns {any}
          */
-        public getOption(key: string, defaultValue: any = null): any {
+        public getOption(key:string, defaultValue:any = null):any {
 
             if (this.hasOption(key)) {
                 return this._options[key];
@@ -49,7 +49,7 @@ module TSValidate {
          * @param key
          * @param value
          */
-        public setOption(key: string, value: any): void {
+        public setOption(key:string, value:any):void {
 
             this._options[key] = value;
         }
@@ -60,7 +60,7 @@ module TSValidate {
          * @param label
          * @returns {TSValidate.Validator}
          */
-        public label(label: string):this {
+        public label(label:string):this {
             this._label = label;
             return this;
         }
@@ -70,7 +70,7 @@ module TSValidate {
          *
          * @returns {string}
          */
-        public getLabel(): string {
+        public getLabel():string {
             return this._label;
         }
 
@@ -80,7 +80,7 @@ module TSValidate {
          * @param message
          * @returns {TSValidate.Validator}
          */
-        public message(message: string):this {
+        public message(message:string):this {
             this._message = message;
             return this;
         }
@@ -90,11 +90,11 @@ module TSValidate {
          *
          * @returns {string}
          */
-        public getMessage(): string {
+        public getMessage():string {
             return this._message;
         }
 
-        public validate(validation: TSValidate.Validation, attribute: string): boolean {
+        public validate(validation:TSValidate.Validation, attribute:string):boolean {
 
             return false;
         }

@@ -21,6 +21,6 @@ module TSValidate {
          * @param validation
          * @param attribute
          */
-        validate(validation: TSValidate.Validation, attribute: string): boolean;
+        validate(validation:TSValidate.Validation, attribute:string): boolean;
     }
 }

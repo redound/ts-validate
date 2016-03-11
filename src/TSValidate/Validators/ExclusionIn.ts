@@ -22,13 +22,13 @@ module TSValidate.Validators {
      */
     export class ExclusionIn extends Validator {
 
-        protected _strict: boolean = false;
+        protected _strict:boolean = false;
 
-        protected _allowEmpty: boolean = false;
+        protected _allowEmpty:boolean = false;
 
-        protected _domain: any[];
+        protected _domain:any[];
 
-        public validate(validation:TSValidate.Validation, field:string): boolean {
+        public validate(validation:TSValidate.Validation, field:string):boolean {
 
             var value, domain, message, label, replacePairs, strict;
 
@@ -75,7 +75,7 @@ module TSValidate.Validators {
          * @param haystack The array.
          * @param strict If the third parameter strict is set to TRUE then this function will also check the types of the needle in the haystack.
          */
-        protected inArray(needle: any, haystack: any[], strict: boolean = false) {
+        protected inArray(needle:any, haystack:any[], strict:boolean = false) {
 
             var inArray = false;
 
@@ -89,7 +89,7 @@ module TSValidate.Validators {
             return inArray;
         }
 
-        protected compare(a:any, b: any, strict: boolean) {
+        protected compare(a:any, b:any, strict:boolean) {
 
             if (_.isObject(a) && _.isObject(b)) {
                 if (strict) {
@@ -105,7 +105,7 @@ module TSValidate.Validators {
             return a == b;
         }
 
-        public strict(strict: boolean = true): this {
+        public strict(strict:boolean = true):this {
             this._strict = strict;
             return this;
         }
@@ -114,16 +114,16 @@ module TSValidate.Validators {
             return this._strict;
         }
 
-        public allowEmpty(allowEmpty:boolean = true): this {
+        public allowEmpty(allowEmpty:boolean = true):this {
             this._allowEmpty = allowEmpty;
             return this;
         }
 
-        public getAllowEmpty(): boolean {
+        public getAllowEmpty():boolean {
             return this._allowEmpty;
         }
 
-        public domain(domain: any[]): this {
+        public domain(domain:any[]):this {
             this._domain = domain;
             return this;
         }

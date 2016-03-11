@@ -23,9 +23,9 @@ module TSValidate.Validators {
 
         public static URL_REGEX = /(http|ftp|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/;
 
-        protected _allowEmpty: boolean = false;
+        protected _allowEmpty:boolean = false;
 
-        public validate(validation: TSValidate.Validation, field: string): boolean {
+        public validate(validation:TSValidate.Validation, field:string):boolean {
 
             var value, message, label, replacePairs;
 
@@ -58,12 +58,12 @@ module TSValidate.Validators {
             return true;
         }
 
-        public allowEmpty(allowEmpty: boolean = true) {
+        public allowEmpty(allowEmpty:boolean = true) {
             this._allowEmpty = allowEmpty;
             return this;
         }
 
-        public getAllowEmpty(): boolean {
+        public getAllowEmpty():boolean {
             return this._allowEmpty;
         }
     }

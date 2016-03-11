@@ -22,11 +22,11 @@ module TSValidate.Validators {
      */
     export class Identical extends Validator {
 
-        protected _accepted: any;
+        protected _accepted:any;
 
-        protected _value: any;
+        protected _value:any;
 
-        public validate(validation:TSValidate.Validation, field:string): boolean {
+        public validate(validation:TSValidate.Validation, field:string):boolean {
 
             var message, label, replacePairs, value, valid;
 
@@ -61,21 +61,21 @@ module TSValidate.Validators {
             return true;
         }
 
-        public accepted(value: any): this {
+        public accepted(value:any):this {
             this._accepted = value;
             return this;
         }
 
-        public getAccepted(): any {
+        public getAccepted():any {
             return this._accepted;
         }
 
-        public value(value: any): this {
+        public value(value:any):this {
             this._value = value;
             return this;
         }
 
-        public getValue(): any {
+        public getValue():any {
             return this._value;
         }
 

@@ -24,11 +24,11 @@ module TSValidate.Validators {
      */
     export class Between extends Validator {
 
-        protected _allowEmpty: boolean;
+        protected _allowEmpty:boolean;
 
-        protected _minimum: number;
+        protected _minimum:number;
 
-        protected _maximum: number;
+        protected _maximum:number;
 
         public validate(validation:TSValidate.Validation, field:string):boolean {
 
@@ -66,26 +66,26 @@ module TSValidate.Validators {
             return true;
         }
 
-        public allowEmpty(allowEmpty: boolean = true): this {
+        public allowEmpty(allowEmpty:boolean = true):this {
             this._allowEmpty = allowEmpty;
             return this;
         }
 
-        public minimum(minimum: number):this {
+        public minimum(minimum:number):this {
             this._minimum = minimum;
             return this;
         }
 
-        public getMinimum(): number {
+        public getMinimum():number {
             return this._minimum;
         }
 
-        public maximum(maximum: number): this {
+        public maximum(maximum:number):this {
             this._maximum = maximum;
             return this;
         }
 
-        public getMaximum(): number {
+        public getMaximum():number {
             return this._maximum;
         }
     }

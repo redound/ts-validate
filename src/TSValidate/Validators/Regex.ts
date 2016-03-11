@@ -22,11 +22,11 @@ module TSValidate.Validators {
      */
     export class Regex extends Validator {
 
-        protected _allowEmpty: boolean = false;
+        protected _allowEmpty:boolean = false;
 
-        protected _pattern: RegExp;
+        protected _pattern:RegExp;
 
-        public validate(validation: TSValidate.Validation, field: string): boolean {
+        public validate(validation:TSValidate.Validation, field:string):boolean {
 
             var matches, pattern, message, value, label, replacePairs;
 
@@ -63,16 +63,16 @@ module TSValidate.Validators {
             return true;
         }
 
-        public allowEmpty(allowEmpty: boolean = true): this {
+        public allowEmpty(allowEmpty:boolean = true):this {
             this._allowEmpty = allowEmpty;
             return this;
         }
 
-        public getAllowEmpty(): boolean {
+        public getAllowEmpty():boolean {
             return this._allowEmpty;
         }
 
-        public pattern(pattern: RegExp):this {
+        public pattern(pattern:RegExp):this {
             this._pattern = pattern;
             return this;
         }

@@ -27,7 +27,7 @@ module TSValidate {
          * Returns field name related message
          * @param field
          */
-        setField(field: string): this;
+        setField(field:string): this;
 
         /**
          * Returns verbose message
