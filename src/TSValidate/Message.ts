@@ -58,12 +58,19 @@ module TSValidate {
         }
 
         /**
-         * Returns field name related message
+         * Sets field name related message
          * @param field
          */
         public setField(field:string):this {
             this._field = field;
             return this;
+        }
+
+        /**
+         * Returns field name related message
+         */
+        public getField():string {
+            return this._field;
         }
 
         /**
