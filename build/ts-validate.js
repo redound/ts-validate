@@ -43,6 +43,9 @@ var TSValidate;
             this._field = field;
             return this;
         };
+        Message.prototype.getField = function () {
+            return this._field;
+        };
         Message.prototype.toString = function () {
             return this._message;
         };

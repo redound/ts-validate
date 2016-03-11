@@ -14,6 +14,7 @@ declare module TSValidate {
         setMessage(message: string): this;
         getMessage(): string;
         setField(field: string): this;
+        getField(): string;
         toString(): string;
     }
 }
