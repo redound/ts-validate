@@ -790,15 +790,15 @@ var TSValidate;
             if (data === void 0) { data = null; }
             if (entity === void 0) { entity = null; }
             var validators, messages, field, validator, status;
+            messages = new TSCore.Data.Collection();
             validators = this._validators;
             if (validators.isEmpty()) {
                 throw new TSValidate.Exception("There are no validators to validate");
             }
             this._values = null;
-            messages = new TSCore.Data.Collection();
             status = this.beforeValidation(data, entity, messages);
             if (status === false) {
-                return status;
+                return messages;
             }
             this._messages = messages;
             if (_.isArray(data) || _.isObject(data)) {
@@ -810,7 +810,7 @@ var TSValidate;
                 }
                 if (validator.validate(_this, field) === false) {
                     if (validator.getOption("cancelOnFail")) {
-                        return;
+                        return messages;
                     }
                 }
             });

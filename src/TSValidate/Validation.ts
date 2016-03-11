@@ -71,6 +71,8 @@ module TSValidate {
 
             var validators, messages, field, validator:ValidatorInterface, status;
 
+            messages = new TSCore.Data.Collection<MessageInterface>();
+
             validators = this._validators;
 
             if (validators.isEmpty()) {
@@ -82,12 +84,10 @@ module TSValidate {
              */
             this._values = null;
 
-            messages = new TSCore.Data.Collection<MessageInterface>();
-
             status = this.beforeValidation(data, entity, messages);
 
             if (status === false) {
-                return status;
+                return messages;
             }
 
             this._messages = messages;
@@ -104,7 +104,7 @@ module TSValidate {
 
                 if (validator.validate(this, field) === false) {
                     if (validator.getOption("cancelOnFail")) {
-                        return;
+                        return messages;
                     }
                 }
             });

@@ -1,3 +1,4 @@
+/// <reference path="../node_modules/ts-core/build/ts-core.d.ts" />
 declare module TSValidate {
     class Exception extends TSCore.Exception.Exception {
     }
