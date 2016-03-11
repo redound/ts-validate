@@ -1,8 +1,8 @@
 {
-  "name": "ts-validation",
-  "version": "0.1.3",
+  "name": "ts-validate",
+  "version": "0.1.4",
   "description": "TypeScript Validation Library",
-  "main": "build/ts-validation.js",
+  "main": "build/ts-validate.js",
   "scripts": {
     "test": "grunt test"
   },
