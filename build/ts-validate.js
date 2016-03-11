@@ -796,6 +796,9 @@ var TSValidate;
                 throw new TSValidate.Exception("There are no validators to validate");
             }
             this._values = null;
+            if (!_.isNull(entity)) {
+                this._entity = entity;
+            }
             status = this.beforeValidation(data, entity, messages);
             if (status === false) {
                 return messages;
