@@ -939,7 +939,7 @@ var TSValidate;
             return this._defaultMessages[type];
         };
         Validation.prototype.getMessages = function () {
-            return this._messages;
+            return this._messages.clone();
         };
         Validation.prototype.setLabels = function (labels) {
             this._labels = labels;
