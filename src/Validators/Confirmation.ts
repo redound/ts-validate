@@ -1,0 +1,98 @@
+import Validator from "../Validator";
+import Validation from "../Validation";
+import Message from "../Message";
+/**
+ * TSValidate.Validators.Confirmation
+ *
+ * Checks that two values have the same value
+ *
+ *<code>
+ *import Confirmation = TSValidate.Validators.Confirmation;
+ *
+ *validate.add('password', new Confirmation()
+ *  .with('confirmPassword')
+ *  .message('Password doesn\'t match confirmation')
+ *);
+ *</code>
+ */
+export default class Confirmation extends Validator {
+
+    protected _against:string;
+
+    protected _labelAgainst:string;
+
+    protected _ignoreCase:boolean = false;
+
+    public validate(validation:Validation, field:string):boolean {
+
+        var fieldAgainst, value, valueAgainst, message, label, labelAgainst, replacePairs;
+
+        fieldAgainst = this.getAgainst();
+        value = validation.getValue(field);
+        valueAgainst = validation.getValue(fieldAgainst);
+
+        if (!this.compare(value, valueAgainst)) {
+
+            label = this.getLabel();
+            if (!label) {
+                label = validation.getLabel(field);
+            }
+
+            labelAgainst = this.getLabelAgainst();
+            if (!labelAgainst) {
+                labelAgainst = validation.getLabel(fieldAgainst);
+            }
+
+            message = this.getMessage();
+            replacePairs = [':field', label, ':against', labelAgainst];
+
+            if (!message) {
+                message = validation.getDefaultMessage('Confirmation');
+            }
+
+            message.replace(replacePairs[0], replacePairs[1]);
+            message.replace(replacePairs[2], replacePairs[3]);
+
+            validation.appendMessage(new Message(message, field, 'Confirmation'));
+            return false;
+        }
+
+        return true;
+    }
+
+    protected compare(a:string = '', b:string = ''):boolean {
+
+        if (this.getIgnoreCase()) {
+            return a.toLowerCase() === b.toLowerCase();
+        }
+
+        return a === b;
+    }
+
+    public ignoreCase(ignoreCase:boolean = true):this {
+        this._ignoreCase = ignoreCase;
+        return this;
+    }
+
+    public getIgnoreCase():boolean {
+        return this._ignoreCase;
+    }
+
+    public against(against:string):this {
+        this._against = against;
+        return this;
+    }
+
+    public getAgainst():string {
+        return this._against;
+    }
+
+    public labelAgainst(labelAgainst:string):this {
+        this._labelAgainst = labelAgainst;
+        return this;
+    }
+
+    public getLabelAgainst():string {
+        return this._labelAgainst;
+    }
+}

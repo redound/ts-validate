@@ -1,61 +1,27 @@
 {
   "name": "ts-validate",
-  "version": "0.1.10",
+  "version": "0.1.11",
   "description": "TypeScript Validation Library",
-  "main": "build/ts-validate.js",
+  "main": "lib/index.js",
+  "typings": "lib/index",
   "scripts": {
-    "test": "grunt test"
+    "test": "",
+    "postinstall": "typings install",
+    "build": "tsc"
   },
   "dependencies": {
-    "tsd": "^0.6.3",
-    "underscore": "^1.8.3",
-    "ts-core": "git://github.com/redound/ts-core#development"
+    "ts-core": "git+https://github.com/redound/ts-core.git#dev-package",
+    "underscore": "^1.8.3"
   },
   "devDependencies": {
-    "grunt": "^0.4.5",
-    "grunt-cli": "^0.1.13",
-    "grunt-contrib-uglify": "^0.9.1",
-    "grunt-karma": "^0.12.0",
-    "grunt-prompt": "^1.3.0",
-    "grunt-release": "^0.13.0",
-    "grunt-ts": "^5.3.2",
-    "jasmine-core": "^2.3.4",
-    "karma": "^0.13.10",
-    "karma-coverage": "^0.5.2",
-    "karma-coveralls": "^1.1.2",
-    "karma-firefox-launcher": "^0.1.6",
-    "karma-jasmine": "^0.3.6",
-    "semver": "^5.0.1"
+    "tsd": "^0.6.5"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/redound/ts-validate.git"
   },
-  "keywords": [
-    "typescript",
-    "javascript",
-    "core",
-    "library",
-    "collection",
-    "dictionary",
-    "array",
-    "set",
-    "events",
-    "config",
-    "di",
-    "grid",
-    "sortedcollection",
-    "geometry",
-    "data",
-    "model",
-    "size",
-    "point"
-  ],
-  "contributors": [
-    "Bart Blok <bart@wittig.nl>",
-    "Olivier Andriessen <olivierandriessen@gmail.com>"
-  ],
-  "license": "MIT",
+  "author": "= <=> (=)",
+  "license": "ISC",
   "bugs": {
     "url": "https://github.com/redound/ts-validate/issues"
   },

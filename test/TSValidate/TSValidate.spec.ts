@@ -1,1 +1,0 @@
-/// <reference path="../../build/ts-validate.d.ts" />
