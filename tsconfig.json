@@ -11,27 +11,13 @@
     "suppressImplicitAnyIndexErrors": true,
     "outDir": "./lib"
   },
-  "filesGlob": [
-    "./**/*.ts",
-    "!./node_modules/**/*.ts"
-  ],
   "files": [
-    "./src/Validators/Between.ts",
-    "./src/Validators/Confirmation.ts",
-    "./src/Validators/Email.ts",
-    "./src/Validators/ExclusionIn.ts",
-    "./src/Validators/Identical.ts",
-    "./src/Validators/InclusionIn.ts",
-    "./src/Validators/PresenceOf.ts",
-    "./src/Validators/Regex.ts",
-    "./src/Validators/StringLength.ts",
-    "./src/Validators/Url.ts",
-    "./src/Message.ts",
-    "./src/MessageInterface.ts",
-    "./src/Validation.ts",
-    "./src/Validator.ts",
-    "./src/ValidatorInterface.ts",
-    "./src/index.ts",
+    "./src/ts-validate.ts",
     "./typings/main.d.ts"
+  ],
+  "exclude": [
+    "./typings/browser.d.ts",
+    "./typings/browser",
+    "./node_modules"
   ]
 }
