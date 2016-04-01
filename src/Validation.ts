@@ -14,6 +14,8 @@ import StringLength from "./Validators/StringLength";
 import Between from "./Validators/Between";
 import Confirmation from "./Validators/Confirmation";
 import Url from "./Validators/Url";
+import * as _ from "underscore";
+
 export default class Validation {
 
     protected _data;

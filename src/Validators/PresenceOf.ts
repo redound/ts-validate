@@ -1,6 +1,8 @@
 import Validator from "../Validator";
 import Validation from "../Validation";
 import Message from "../Message";
+import * as _ from "underscore";
+
 /**
  * TSValidate.Validators.PresenceOf
  *

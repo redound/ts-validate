@@ -2,6 +2,8 @@ import Validator from "../Validator";
 import Validation from "../Validation";
 import Exception from "ts-core/lib/Exceptions/Exception";
 import Message from "../Message";
+import * as _ from "underscore";
+
 /**
  * TSValidate.Validators.ExclusionIn
  *
