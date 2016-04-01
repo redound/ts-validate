@@ -10,11 +10,11 @@
     "build": "tsc"
   },
   "dependencies": {
-    "ts-core": "git+https://github.com/redound/ts-core.git#dev-package",
-    "underscore": "^1.8.3"
   },
   "devDependencies": {
-    "tsd": "^0.6.5"
+    "tsd": "^0.6.5",
+    "ts-core": "git+https://github.com/redound/ts-core.git#dev-package",
+    "underscore": "^1.8.3"
   },
   "repository": {
     "type": "git",
