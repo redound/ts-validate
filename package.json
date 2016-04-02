@@ -3,10 +3,8 @@
   "version": "0.1.11",
   "description": "TypeScript Validation Library",
   "main": "lib/index.js",
-  "typings": "lib/index",
   "scripts": {
     "test": "",
-    "postinstall": "typings install",
     "build": "tsc"
   },
   "dependencies": {
